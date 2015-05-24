@@ -5,7 +5,7 @@ sysmon.py is a program designed to monitor your system.
 Install by navigating to the directory you have Setup.py stored in.
 
 Then, type 'sudo python Setup.py' in the terminal.
-It will not work with python3. Setup.py is written in python2.
+It will not work with python3. sysmon is written in python2.
 
 To use, type 'sysmon' into the command line.
 
