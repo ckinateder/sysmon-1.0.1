@@ -56,7 +56,7 @@ os.system('chmod +x ./sysmon.desktop')
 os.system('cp ./sysmon.desktop ~/Desktop')
 os.system('chmod 0777 ~/Desktop/sysmon.desktop')
 os.system('cp ~/Desktop/sysmon.desktop ~/.local/share/applications') # may not work
-os.system('chmod 0777 ~/.local/share/applications/sysmon.desktop')
+os.system('chmod 0777 ~/.local/share/applications/sysmon.desktop'
 print "Done!"
 	
 

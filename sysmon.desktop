@@ -1,0 +1,7 @@
+[Desktop Entry]
+Version=1.0
+Name=sysmon
+Exec=sysmon
+Icon=/usr/local/share/sysmon/gear-1.png
+Terminal=true
+Type=Application
