@@ -4,6 +4,7 @@ version = "1.0.1"
 
 cpu_perc = psutil.cpu_percent(interval=1, percpu=True) #test for number of cores
 
+
 if len(cpu_perc) == 4:
                 
         #
@@ -56,7 +57,7 @@ if len(cpu_perc) == 4:
                                 out = l[a]
                 return out
                                 
-        def disp(temp,degree,minutes,seconds):
+        def disp(degree,minutes,seconds):
                 global cpu_perc
                 global swap
                 global swap_perc
@@ -80,7 +81,7 @@ if len(cpu_perc) == 4:
                 print "-"*30
                 print "CPU"
                 print "-"*30
-                print "CPU Temperature: " , temp, "'C"
+                #print "CPU Temperature: " , temp, "'C"
                 for i in range(len(cpu_perc)):
                         print "CPU Core", str(i+1),":", str(cpu_perc[i]), "%"
                 
@@ -93,7 +94,7 @@ if len(cpu_perc) == 4:
                 print "NETWORK"
                 print "-"*30
                 print "MB sent: ", mbytes_sent
-                print "MB recieved: ", mbytes_recv
+                print "MB received: ", mbytes_recv
 
         def main():
                 global version
@@ -125,9 +126,7 @@ if len(cpu_perc) == 4:
                                 exitmsg = "Seconds must be defined as an integer greater than zero."
                                 usageinfo()
 
-                prevtemp = 21
-                tmax = 0
-                tmin = 1000
+             
                 bseconds = int(time.time())
                 
                 if avg == 0:
@@ -135,21 +134,9 @@ if len(cpu_perc) == 4:
                 
                 try :
                   while True:
-                         temp = open("/sys/class/thermal/thermal_zone0/temp").read().strip().lstrip('temperature :').rstrip(' C')
-                         temp = int(temp) / 1000
-                         tick = int(time.time()) - int(bseconds)
-                         seccount = int(seccount) + int(tick) - int(seclast)
-                         seclast = tick
-                         if seccount >= 60:
-                                 minutes = int(minutes) + 1
-                                 seccount = int(seccount) - 60
-                         seconds = int(tick) - (60 * int(minutes))
-                         temp = float(temp)
-                         if prevtemp > 20 and temp < 18 :
-                                temp = temp * 10
-                         prevtemp = temp
+                         
                          #
-                         disp(temp,degree,minutes,seconds)
+                         disp(degree,minutes,seconds)
                          
                          cpu1_list.append(float(cpu_perc[0]))
                          cpu2_list.append(float(cpu_perc[1]))
@@ -163,14 +150,7 @@ if len(cpu_perc) == 4:
                          mbytes_recv_list.append(mbytes_recv)
                          
                          
-                         if temp < tmin :
-                                 tmin = temp
-                         if temp > tmax :
-                                 tmax = temp
-                         tsum = float(tsum) + float(temp)
-                         ticker = int(ticker) + 1
-                         if run == 1 and runtime <= seccount:
-                                break 	
+                         	
                          time.sleep(1)
                          sys.stdout.flush()
                 #When Ctrl-C is pressed, show summary data
@@ -178,9 +158,7 @@ if len(cpu_perc) == 4:
                 except KeyboardInterrupt :
                         pass
                         
-                tavg = tsum / ticker
-                tavg = round(tavg, 1)
-                
+                                
                 #add this info for cpu, ram
                 avg_cpu1_perc = getavg(cpu1_list) #get averages and print them
                 avg_cpu2_perc = getavg(cpu2_list)
@@ -203,7 +181,7 @@ if len(cpu_perc) == 4:
                 low_mem_perc = getlow(mem_list)
                 low_swap_perc = getlow(swap_list)
                 
-                print "\n\nAverage CPU temperature was",tavg,"degrees Celsius"
+                #print "\n\nAverage CPU temperature was",tavg,"degrees Celsius"
                 print "Average CPU1 percent was",avg_cpu1_perc,"%"
                 print "Average CPU2 percent was",avg_cpu2_perc,"%"
                 print "Average CPU3 percent was",avg_cpu3_perc,"%"
@@ -211,7 +189,7 @@ if len(cpu_perc) == 4:
                 print "Average RAM percent was",avg_mem_perc,"%"	
                 print "Average SWAP percent was",avg_swap_perc,"%\n"	
                 
-                print "Highest CPU temperature was",tmax,"degrees Celsius"	
+                #print "Highest CPU temperature was",tmax,"degrees Celsius"	
                 print "Highest CPU1 percent was",high_cpu1_perc,"%"
                 print "Highest CPU2 percent was",high_cpu2_perc,"%"
                 print "Highest CPU3 percent was",high_cpu3_perc,"%"
@@ -219,7 +197,7 @@ if len(cpu_perc) == 4:
                 print "Highest RAM percent was",high_mem_perc,"%"	
                 print "Highest SWAP percent was",high_swap_perc,"%\n"	
                 
-                print "Lowest CPU temperature was",tmin,"degrees Celsius"
+                #print "Lowest CPU temperature was",tmin,"degrees Celsius"
                 print "Lowest CPU1 percent was",low_cpu1_perc,"%"
                 print "Lowest CPU2 percent was",low_cpu2_perc,"%"
                 print "Lowest CPU3 percent was",low_cpu3_perc,"%"
@@ -235,9 +213,9 @@ if len(cpu_perc) == 4:
                         tod = datetime.datetime.now()
                         syslog = open ( "/var/log/sysmon.log" , "a" )
                         syslog.write ("---------------\n")
-                        syslog.write ("\nAverage CPU temperature was ")
-                        syslog.write (str(tavg))
-                        syslog.write (" degrees Celsius\n")
+                        #syslog.write ("\nAverage CPU temperature was ")
+                        #syslog.write (str(tavg))
+                        #syslog.write (" degrees Celsius\n")
                         syslog.write ("\nAverage CPU1 percent was ")
                         syslog.write (str(avg_cpu1_perc))	
                         syslog.write ("\nAverage CPU2 percent was ")
@@ -251,9 +229,9 @@ if len(cpu_perc) == 4:
                         syslog.write ("\nAverage SWAP percent was ")
                         syslog.write (str(avg_swap_perc))
                         
-                        syslog.write ("\nHighest CPU temperature was ")
-                        syslog.write (str(tmax))
-                        syslog.write (" degrees Celsius\n")
+                        #syslog.write ("\nHighest CPU temperature was ")
+                        #syslog.write (str(tmax))
+                        #syslog.write (" degrees Celsius\n")
                         syslog.write ("\nHighest CPU1 percent was ")
                         syslog.write (str(high_cpu1_perc))	
                         syslog.write ("\nHighest CPU2 percent was ")
@@ -267,9 +245,9 @@ if len(cpu_perc) == 4:
                         syslog.write ("\nHighest SWAP percent was ")
                         syslog.write (str(high_swap_perc))
                         
-                        syslog.write ("\nLowest CPU temperature was ")
-                        syslog.write (str(tmin))
-                        syslog.write (" degrees Celsius\n")
+                        #syslog.write ("\nLowest CPU temperature was ")
+                        #syslog.write (str(tmin))
+                       # syslog.write (" degrees Celsius\n")
                         syslog.write ("\nLowest CPU1 percent was ")
                         syslog.write (str(low_cpu1_perc))	
                         syslog.write ("\nLowest CPU2 percent was ")
@@ -342,7 +320,7 @@ elif len(cpu_perc) == 2:
                                 out = l[a]
                 return out
                                 
-        def disp(temp,degree,minutes,seconds):
+        def disp(degree,minutes,seconds):
                 global cpu_perc
                 global swap
                 global swap_perc
@@ -366,7 +344,7 @@ elif len(cpu_perc) == 2:
                 print "-"*30
                 print "CPU"
                 print "-"*30
-                print "CPU Temperature: " , temp, "'C"
+                #print "CPU Temperature: " , temp, "'C"
                 for i in range(len(cpu_perc)):
                         print "CPU Core", str(i+1),":", str(cpu_perc[i]), "%"
                 
@@ -379,7 +357,7 @@ elif len(cpu_perc) == 2:
                 print "NETWORK"
                 print "-"*30
                 print "MB sent: ", mbytes_sent
-                print "MB recieved: ", mbytes_recv
+                print "MB received: ", mbytes_recv
 
         def main():
                 global version
@@ -411,9 +389,6 @@ elif len(cpu_perc) == 2:
                                 exitmsg = "Seconds must be defined as an integer greater than zero."
                                 usageinfo()
 
-                prevtemp = 21
-                tmax = 0
-                tmin = 1000
                 bseconds = int(time.time())
                 
                 if avg == 0:
@@ -421,21 +396,8 @@ elif len(cpu_perc) == 2:
                 
                 try :
                   while True:
-                         temp = open("/sys/class/thermal/thermal_zone0/temp").read().strip().lstrip('temperature :').rstrip(' C')
-                         temp = int(temp) / 1000
-                         tick = int(time.time()) - int(bseconds)
-                         seccount = int(seccount) + int(tick) - int(seclast)
-                         seclast = tick
-                         if seccount >= 60:
-                                 minutes = int(minutes) + 1
-                                 seccount = int(seccount) - 60
-                         seconds = int(tick) - (60 * int(minutes))
-                         temp = float(temp)
-                         if prevtemp > 20 and temp < 18 :
-                                temp = temp * 10
-                         prevtemp = temp
-                         #
-                         disp(temp,degree,minutes,seconds)
+                
+                         disp(degree,minutes,seconds)
                          
                          cpu1_list.append(float(cpu_perc[0]))
                          cpu2_list.append(float(cpu_perc[1]))
@@ -447,14 +409,7 @@ elif len(cpu_perc) == 2:
                          mbytes_recv_list.append(mbytes_recv)
                          
                          
-                         if temp < tmin :
-                                 tmin = temp
-                         if temp > tmax :
-                                 tmax = temp
-                         tsum = float(tsum) + float(temp)
-                         ticker = int(ticker) + 1
-                         if run == 1 and runtime <= seccount:
-                                break 	
+                         
                          time.sleep(1)
                          sys.stdout.flush()
                 #When Ctrl-C is pressed, show summary data
@@ -462,8 +417,7 @@ elif len(cpu_perc) == 2:
                 except KeyboardInterrupt :
                         pass
                         
-                tavg = tsum / ticker
-                tavg = round(tavg, 1)
+                
                 
                 #add this info for cpu, ram
                 avg_cpu1_perc = getavg(cpu1_list) #get averages and print them
@@ -481,19 +435,19 @@ elif len(cpu_perc) == 2:
                 low_mem_perc = getlow(mem_list)
                 low_swap_perc = getlow(swap_list)
                 
-                print "\n\nAverage CPU temperature was",tavg,"degrees Celsius"
+                
                 print "Average CPU1 percent was",avg_cpu1_perc,"%"
                 print "Average CPU2 percent was",avg_cpu2_perc,"%"
                 print "Average RAM percent was",avg_mem_perc,"%"	
                 print "Average SWAP percent was",avg_swap_perc,"%\n"	
                 
-                print "Highest CPU temperature was",tmax,"degrees Celsius"	
+                
                 print "Highest CPU1 percent was",high_cpu1_perc,"%"
                 print "Highest CPU2 percent was",high_cpu2_perc,"%"
                 print "Highest RAM percent was",high_mem_perc,"%"	
                 print "Highest SWAP percent was",high_swap_perc,"%\n"	
                 
-                print "Lowest CPU temperature was",tmin,"degrees Celsius"
+                
                 print "Lowest CPU1 percent was",low_cpu1_perc,"%"
                 print "Lowest CPU2 percent was",low_cpu2_perc,"%"
                 print "Lowest RAM percent was",low_mem_perc,"%"	
@@ -507,9 +461,7 @@ elif len(cpu_perc) == 2:
                         tod = datetime.datetime.now()
                         syslog = open ( "/var/log/sysmon.log" , "a" )
                         syslog.write ("---------------\n")
-                        syslog.write ("\nAverage CPU temperature was ")
-                        syslog.write (str(tavg))
-                        syslog.write (" degrees Celsius\n")
+                        
                         syslog.write ("\nAverage CPU1 percent was ")
                         syslog.write (str(avg_cpu1_perc))	
                         syslog.write ("\nAverage CPU2 percent was ")
@@ -520,9 +472,7 @@ elif len(cpu_perc) == 2:
                         syslog.write ("\nAverage SWAP percent was ")
                         syslog.write (str(avg_swap_perc))
                         
-                        syslog.write ("\nHighest CPU temperature was ")
-                        syslog.write (str(tmax))
-                        syslog.write (" degrees Celsius\n")
+                        
                         syslog.write ("\nHighest CPU1 percent was ")
                         syslog.write (str(high_cpu1_perc))	
                         syslog.write ("\nHighest CPU2 percent was ")
@@ -533,9 +483,7 @@ elif len(cpu_perc) == 2:
                         syslog.write ("\nHighest SWAP percent was ")
                         syslog.write (str(high_swap_perc))
                         
-                        syslog.write ("\nLowest CPU temperature was ")
-                        syslog.write (str(tmin))
-                        syslog.write (" degrees Celsius\n")
+                        
                         syslog.write ("\nLowest CPU1 percent was ")
                         syslog.write (str(low_cpu1_perc))	
                         syslog.write ("\nLowest CPU2 percent was ")
@@ -635,7 +583,7 @@ elif len(cpu_perc) == 8:
                 print "-"*30
                 print "CPU"
                 print "-"*30
-                print "CPU Temperature: " , temp, "'C"
+                #print "CPU Temperature: " , temp, "'C"
                 for i in range(len(cpu_perc)):
                         print "CPU Core", str(i+1),":", str(cpu_perc[i]), "%"
                 
@@ -648,7 +596,7 @@ elif len(cpu_perc) == 8:
                 print "NETWORK"
                 print "-"*30
                 print "MB sent: ", mbytes_sent
-                print "MB recieved: ", mbytes_recv
+                print "MB received: ", mbytes_recv
 
         def main():
                 global version
@@ -690,21 +638,9 @@ elif len(cpu_perc) == 8:
                 
                 try :
                   while True:
-                         temp = open("/sys/class/thermal/thermal_zone0/temp").read().strip().lstrip('temperature :').rstrip(' C')
-                         temp = int(temp) / 1000
-                         tick = int(time.time()) - int(bseconds)
-                         seccount = int(seccount) + int(tick) - int(seclast)
-                         seclast = tick
-                         if seccount >= 60:
-                                 minutes = int(minutes) + 1
-                                 seccount = int(seccount) - 60
-                         seconds = int(tick) - (60 * int(minutes))
-                         temp = float(temp)
-                         if prevtemp > 20 and temp < 18 :
-                                temp = temp * 10
-                         prevtemp = temp
+                         
                          #
-                         disp(temp,degree,minutes,seconds)
+                         disp(degree,minutes,seconds)
                          
                          cpu1_list.append(float(cpu_perc[0]))
                          cpu2_list.append(float(cpu_perc[1]))
@@ -722,14 +658,7 @@ elif len(cpu_perc) == 8:
                          mbytes_recv_list.append(mbytes_recv)
                          
                          
-                         if temp < tmin :
-                                 tmin = temp
-                         if temp > tmax :
-                                 tmax = temp
-                         tsum = float(tsum) + float(temp)
-                         ticker = int(ticker) + 1
-                         if run == 1 and runtime <= seccount:
-                                break 	
+                          	
                          time.sleep(1)
                          sys.stdout.flush()
                 #When Ctrl-C is pressed, show summary data
@@ -774,7 +703,7 @@ elif len(cpu_perc) == 8:
                 low_mem_perc = getlow(mem_list)
                 low_swap_perc = getlow(swap_list)
                 
-                print "\n\nAverage CPU temperature was",tavg,"degrees Celsius"
+                #print "\n\nAverage CPU temperature was",tavg,"degrees Celsius"
                 print "Average CPU1 percent was",avg_cpu1_perc,"%"
                 print "Average CPU2 percent was",avg_cpu2_perc,"%"
                 print "Average CPU3 percent was",avg_cpu3_perc,"%"
@@ -786,7 +715,7 @@ elif len(cpu_perc) == 8:
                 print "Average RAM percent was",avg_mem_perc,"%"	
                 print "Average SWAP percent was",avg_swap_perc,"%\n"	
                 
-                print "Highest CPU temperature was",tmax,"degrees Celsius"	
+                #print "Highest CPU temperature was",tmax,"degrees Celsius"	
                 print "Highest CPU1 percent was",high_cpu1_perc,"%"
                 print "Highest CPU2 percent was",high_cpu2_perc,"%"
                 print "Highest CPU3 percent was",high_cpu3_perc,"%"
@@ -798,7 +727,7 @@ elif len(cpu_perc) == 8:
                 print "Highest RAM percent was",high_mem_perc,"%"	
                 print "Highest SWAP percent was",high_swap_perc,"%\n"	
                 
-                print "Lowest CPU temperature was",tmin,"degrees Celsius"
+                #print "Lowest CPU temperature was",tmin,"degrees Celsius"
                 print "Lowest CPU1 percent was",low_cpu1_perc,"%"
                 print "Lowest CPU2 percent was",low_cpu2_perc,"%"
                 print "Lowest CPU3 percent was",low_cpu3_perc,"%"
@@ -818,9 +747,7 @@ elif len(cpu_perc) == 8:
                         tod = datetime.datetime.now()
                         syslog = open ( "/var/log/sysmon.log" , "a" )
                         syslog.write ("---------------\n")
-                        syslog.write ("\nAverage CPU temperature was ")
-                        syslog.write (str(tavg))
-                        syslog.write (" degrees Celsius\n")
+                        
                         syslog.write ("\nAverage CPU1 percent was ")
                         syslog.write (str(avg_cpu1_perc))	
                         syslog.write ("\nAverage CPU2 percent was ")
@@ -842,9 +769,7 @@ elif len(cpu_perc) == 8:
                         syslog.write ("\nAverage SWAP percent was ")
                         syslog.write (str(avg_swap_perc))
                         
-                        syslog.write ("\nHighest CPU temperature was ")
-                        syslog.write (str(tmax))
-                        syslog.write (" degrees Celsius\n")
+                        
                         syslog.write ("\nHighest CPU1 percent was ")
                         syslog.write (str(high_cpu1_perc))	
                         syslog.write ("\nHighest CPU2 percent was ")
@@ -866,9 +791,7 @@ elif len(cpu_perc) == 8:
                         syslog.write ("\nHighest SWAP percent was ")
                         syslog.write (str(high_swap_perc))
                         
-                        syslog.write ("\nLowest CPU temperature was ")
-                        syslog.write (str(tmin))
-                        syslog.write (" degrees Celsius\n")
+                        
                         syslog.write ("\nLowest CPU1 percent was ")
                         syslog.write (str(low_cpu1_perc))	
                         syslog.write ("\nLowest CPU2 percent was ")
@@ -953,7 +876,7 @@ elif len(cpu_perc) == 6:
                                 out = l[a]
                 return out
                                 
-        def disp(temp,degree,minutes,seconds):
+        def disp(degree,minutes,seconds):
                 global cpu_perc
                 global swap
                 global swap_perc
@@ -977,7 +900,7 @@ elif len(cpu_perc) == 6:
                 print "-"*30
                 print "CPU"
                 print "-"*30
-                print "CPU Temperature: " , temp, "'C"
+                #print "CPU Temperature: " , temp, "'C"
                 for i in range(len(cpu_perc)):
                         print "CPU Core", str(i+1),":", str(cpu_perc[i]), "%"
                 
@@ -990,7 +913,7 @@ elif len(cpu_perc) == 6:
                 print "NETWORK"
                 print "-"*30
                 print "MB sent: ", mbytes_sent
-                print "MB recieved: ", mbytes_recv
+                print "MB received: ", mbytes_recv
 
         def main():
                 global version
@@ -1022,9 +945,7 @@ elif len(cpu_perc) == 6:
                                 exitmsg = "Seconds must be defined as an integer greater than zero."
                                 usageinfo()
 
-                prevtemp = 21
-                tmax = 0
-                tmin = 1000
+                
                 bseconds = int(time.time())
                 
                 if avg == 0:
@@ -1032,21 +953,9 @@ elif len(cpu_perc) == 6:
                 
                 try :
                   while True:
-                         temp = open("/sys/class/thermal/thermal_zone0/temp").read().strip().lstrip('temperature :').rstrip(' C')
-                         temp = int(temp) / 1000
-                         tick = int(time.time()) - int(bseconds)
-                         seccount = int(seccount) + int(tick) - int(seclast)
-                         seclast = tick
-                         if seccount >= 60:
-                                 minutes = int(minutes) + 1
-                                 seccount = int(seccount) - 60
-                         seconds = int(tick) - (60 * int(minutes))
-                         temp = float(temp)
-                         if prevtemp > 20 and temp < 18 :
-                                temp = temp * 10
-                         prevtemp = temp
+                         
                          #
-                         disp(temp,degree,minutes,seconds)
+                         disp(degree,minutes,seconds)
                          
                          cpu1_list.append(float(cpu_perc[0]))
                          cpu2_list.append(float(cpu_perc[1]))
@@ -1063,14 +972,7 @@ elif len(cpu_perc) == 6:
                          mbytes_recv_list.append(mbytes_recv)
                          
                          
-                         if temp < tmin :
-                                 tmin = temp
-                         if temp > tmax :
-                                 tmax = temp
-                         tsum = float(tsum) + float(temp)
-                         ticker = int(ticker) + 1
-                         if run == 1 and runtime <= seccount:
-                                break 	
+                         
                          time.sleep(1)
                          sys.stdout.flush()
                 #When Ctrl-C is pressed, show summary data
@@ -1109,7 +1011,7 @@ elif len(cpu_perc) == 6:
                 low_mem_perc = getlow(mem_list)
                 low_swap_perc = getlow(swap_list)
                 
-                print "\n\nAverage CPU temperature was",tavg,"degrees Celsius"
+                #print "\n\nAverage CPU temperature was",tavg,"degrees Celsius"
                 print "Average CPU1 percent was",avg_cpu1_perc,"%"
                 print "Average CPU2 percent was",avg_cpu2_perc,"%"
                 print "Average CPU3 percent was",avg_cpu3_perc,"%"
@@ -1120,7 +1022,7 @@ elif len(cpu_perc) == 6:
                 print "Average RAM percent was",avg_mem_perc,"%"	
                 print "Average SWAP percent was",avg_swap_perc,"%\n"	
                 
-                print "Highest CPU temperature was",tmax,"degrees Celsius"	
+                #print "Highest CPU temperature was",tmax,"degrees Celsius"	
                 print "Highest CPU1 percent was",high_cpu1_perc,"%"
                 print "Highest CPU2 percent was",high_cpu2_perc,"%"
                 print "Highest CPU3 percent was",high_cpu3_perc,"%"
@@ -1131,7 +1033,7 @@ elif len(cpu_perc) == 6:
                 print "Highest RAM percent was",high_mem_perc,"%"	
                 print "Highest SWAP percent was",high_swap_perc,"%\n"	
                 
-                print "Lowest CPU temperature was",tmin,"degrees Celsius"
+                #print "Lowest CPU temperature was",tmin,"degrees Celsius"
                 print "Lowest CPU1 percent was",low_cpu1_perc,"%"
                 print "Lowest CPU2 percent was",low_cpu2_perc,"%"
                 print "Lowest CPU3 percent was",low_cpu3_perc,"%"
@@ -1150,9 +1052,7 @@ elif len(cpu_perc) == 6:
                         tod = datetime.datetime.now()
                         syslog = open ( "/var/log/sysmon.log" , "a" )
                         syslog.write ("---------------\n")
-                        syslog.write ("\nAverage CPU temperature was ")
-                        syslog.write (str(tavg))
-                        syslog.write (" degrees Celsius\n")
+                        
                         syslog.write ("\nAverage CPU1 percent was ")
                         syslog.write (str(avg_cpu1_perc))	
                         syslog.write ("\nAverage CPU2 percent was ")
@@ -1172,9 +1072,7 @@ elif len(cpu_perc) == 6:
                         syslog.write ("\nAverage SWAP percent was ")
                         syslog.write (str(avg_swap_perc))
                         
-                        syslog.write ("\nHighest CPU temperature was ")
-                        syslog.write (str(tmax))
-                        syslog.write (" degrees Celsius\n")
+                        
                         syslog.write ("\nHighest CPU1 percent was ")
                         syslog.write (str(high_cpu1_perc))	
                         syslog.write ("\nHighest CPU2 percent was ")
@@ -1193,9 +1091,7 @@ elif len(cpu_perc) == 6:
                         syslog.write ("\nHighest SWAP percent was ")
                         syslog.write (str(high_swap_perc))
                         
-                        syslog.write ("\nLowest CPU temperature was ")
-                        syslog.write (str(tmin))
-                        syslog.write (" degrees Celsius\n")
+                        
                         syslog.write ("\nLowest CPU1 percent was ")
                         syslog.write (str(low_cpu1_perc))	
                         syslog.write ("\nLowest CPU2 percent was ")

@@ -8,6 +8,7 @@ logpath = "/var/log/"
 usage = 0
 workdir = os.getcwd()
 
+
 if user != 0 :
 	print "You must be root to install this program.  Try logging is as root (su -) or using sudo.\n"
 	sys.exit()
@@ -17,8 +18,12 @@ if os.path.exists ('./sysmon.py') == False:
 	sys.exit() 
 	
 if os.path.exists('/sys/class/thermal/thermal_zone0/temp') == False:
-	print "Sorry, your hardware is not yet supported."
-	sys.exit()
+	print "Sorry, your hardware is not yet supported.\nProceed with alternate installation? [Y/n]"
+	i = str(input())
+	if i != 'n' or i != 'N':
+		print "Proceeding..."
+	else:
+		sys.exit()
 	
 if usage == 1:
 	print "sysmon installation options:\n"

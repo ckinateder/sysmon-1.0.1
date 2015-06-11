@@ -1,8 +1,16 @@
 #!/usr/bin/env python
 import sys, os ,datetime, time, psutil, getopt
 version = "1.0.1"
-
+if os.path.exists('/sys/class/thermal/thermal_zone0/temp') == False:
+	cwd = os.getcwd()
+	cwdcd = 'cd '+str(cwd)
+	os.system(cwdcd)
+	os.system('python sysmon-no-temp.py')
+	time.sleep(1)
+	sys.exit() #?? maybe
+	
 cpu_perc = psutil.cpu_percent(interval=1, percpu=True) #test for number of cores
+
 
 if len(cpu_perc) == 4:
                 
