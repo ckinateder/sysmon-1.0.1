@@ -19,8 +19,9 @@ if os.path.exists ('./sysmon.py') == False:
 	
 if os.path.exists('/sys/class/thermal/thermal_zone0/temp') == False:
 	print "Sorry, your hardware is not yet supported.\nProceed with alternate installation? [Y/n]"
-	i = "'"+input()+"'"
-	if str(i) == 'Y' or str(i) == 'y':
+	i = input()
+	g = "'"+str(i)+"'"
+	if str(g) == 'Y' or str(g) == 'y':
 		print "Proceeding..."
 	else:
 		sys.exit()
