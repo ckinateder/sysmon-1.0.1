@@ -24,6 +24,7 @@ if os.path.exists('/sys/class/thermal/thermal_zone0/temp') == False:
 	if str(i) == 'Y' or str(i) == 'y':
 		print "Proceeding..."
 	else:
+		print('ABORT.')
 		sys.exit()
 	
 if usage == 1:
@@ -49,7 +50,7 @@ except:
 		print "Installed modules!"
 	except:
 		print "FATAL ERROR\nPACKAGE 'pip' NOT FOUND\nABORT."
-		
+		sys.exit()
 	#print "Installed modules!"
 
 print "Copying program to /usr/local/bin"
