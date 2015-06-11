@@ -57,7 +57,7 @@ if len(cpu_perc) == 4:
                                 out = l[a]
                 return out
                                 
-        def disp(degree):
+        def disp(degree,minutes):
                 global cpu_perc
                 global swap
                 global swap_perc
@@ -136,7 +136,7 @@ if len(cpu_perc) == 4:
                   while True:
                          
                          #
-                         disp(degree)
+                         disp(degree,minutes)
                          
                          cpu1_list.append(float(cpu_perc[0]))
                          cpu2_list.append(float(cpu_perc[1]))
@@ -320,7 +320,7 @@ elif len(cpu_perc) == 2:
                                 out = l[a]
                 return out
                                 
-        def disp(degree):
+        def disp(degree,minutes,seconds):
                 global cpu_perc
                 global swap
                 global swap_perc
@@ -397,7 +397,7 @@ elif len(cpu_perc) == 2:
                 try :
                   while True:
                 
-                         disp(degree)
+                         disp(degree,minutes,seconds)
                          
                          cpu1_list.append(float(cpu_perc[0]))
                          cpu2_list.append(float(cpu_perc[1]))
@@ -559,7 +559,7 @@ elif len(cpu_perc) == 8:
                                 out = l[a]
                 return out
                                 
-        def disp(temp,degree):
+        def disp(temp,degree,minutes,seconds):
                 global cpu_perc
                 global swap
                 global swap_perc
@@ -640,7 +640,7 @@ elif len(cpu_perc) == 8:
                   while True:
                          
                          #
-                         disp(degree)
+                         disp(degree,minutes,seconds)
                          
                          cpu1_list.append(float(cpu_perc[0]))
                          cpu2_list.append(float(cpu_perc[1]))
@@ -876,7 +876,7 @@ elif len(cpu_perc) == 6:
                                 out = l[a]
                 return out
                                 
-        def disp(degree):
+        def disp(degree,minutes,seconds):
                 global cpu_perc
                 global swap
                 global swap_perc
@@ -955,7 +955,7 @@ elif len(cpu_perc) == 6:
                   while True:
                          
                          #
-                         disp(degree)
+                         disp(degree,minutes,seconds)
                          
                          cpu1_list.append(float(cpu_perc[0]))
                          cpu2_list.append(float(cpu_perc[1]))
