@@ -43,7 +43,13 @@ except:
 	print "Updating..."
 	os.system('apt-get update')
 	os.system('pip install psutil')
-	print "Installed modules!"
+	try:
+		import psutil
+		print "Installed modules!"
+	except:
+		print "FATAL ERROR\nPACKAGE 'pip' NOT FOUND\nABORT."
+		
+	#print "Installed modules!"
 
 print "Copying program to /usr/local/bin"
 os.system('chmod a+x ./sysmon.py')
