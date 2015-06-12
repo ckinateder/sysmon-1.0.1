@@ -40,7 +40,7 @@ try:
 	print "Modules already installed!"
 except:
 	print "Installing modules: "
-	os.system('apt-get install python-pip')
+	os.system('apt-get install pip')
 	#os.system('Y')
 	print "Updating..."
 	os.system('apt-get update')
