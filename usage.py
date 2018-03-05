@@ -68,9 +68,8 @@ def disp(degree):
 def main():
     print("Press Ctrl+C to exit")
     while True:
-        #temp = open("/sys/class/thermal/thermal_zone0/temp").read().strip().lstrip('temperature :').rstrip(' C')
-        #temp = float(temp) / 1000
-        #disp(temp)
-        disp(50)
+        temp = open("/sys/class/thermal/thermal_zone0/temp").read().strip().lstrip('temperature :').rstrip(' C')
+        temp = float(temp) / 1000
+        disp(temp)
 
 main()
