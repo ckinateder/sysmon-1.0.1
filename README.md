@@ -242,5 +242,5 @@ Run this program from the command line. Pass the disks you want to monitor as ar
     Megabytes free:  269274.042969
     Percentage used:  17.6 
 
-
+**Disclaimer: none of this is too relevant anymore. I wrote all this in 5th grade and I just uploaded it as a record.**
   [1]: https://github.com/calthecoder/sysmon-1.0.1/archive/master.zip "sysmon"
